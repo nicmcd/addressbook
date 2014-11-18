@@ -7,7 +7,7 @@ CFLAGS += $(shell pkg-config --cflags protobuf)
 LD_FLAGS := $(shell pkg-config --libs protobuf)
 LINT_FLAGS := --filter=-legal/copyright,-readability/streams,-build/namespaces
 
-.PHONY: clean
+.PHONY: all cleanall cleanbin cleanbld cleanlib
 
 all: bin/manager bin/search bin/unit_tests
 
@@ -15,7 +15,7 @@ bin/manager: bld/manager/manager.cc.o bld/common/addressbook.pb.cc.o bld/common/
 	$(CXX) $(CFLAGS) -o bin/manager bld/manager/manager.cc.o bld/common/addressbook.pb.cc.o bld/common/dummy.cc.o $(LD_FLAGS)
 
 bin/search: bld/search/search.cc.o bld/common/addressbook.pb.cc.o bld/common/dummy.cc.o lib/zlib/libz.a | bin
-	$(CXX) $(CFLAGS) -Llibs/zlib/ -o bin/search bld/search/search.cc.o bld/common/addressbook.pb.cc.o bld/common/dummy.cc.o $(LD_FLAGS) -lz
+	$(CXX) $(CFLAGS) -Llib/zlib/ -o bin/search bld/search/search.cc.o bld/common/addressbook.pb.cc.o bld/common/dummy.cc.o $(LD_FLAGS) -lz
 
 bin/unit_tests: bld/common/dummy_TEST.cc.o bld/common/dummy.cc.o | bin
 	$(CXX) $(CFLAGS) -o bin/unit_tests /home/nic/.google/gtest-1.7.0/make/gtest_main.a bld/common/dummy_TEST.cc.o bld/common/dummy.cc.o $(LD_FLAGS)
@@ -30,7 +30,7 @@ bld/manager:
 	mkdir -p bld/manager
 
 bld/search/search.cc.o: src/common/addressbook.pb.h bld/search/search.cc.lint | bld/search 
-	$(CXX) $(CFLAGS) -c -o bld/search/search.cc.o src/search/search.cc
+	$(CXX) $(CFLAGS) -Ilib -c -o bld/search/search.cc.o src/search/search.cc
 
 bld/search:
 	mkdir -p bld/search
@@ -76,11 +76,23 @@ src/common/addressbook.pb.cc: src/common/addressbook.proto
 src/common/addressbook.pb.h: src/common/addressbook.proto
 	cd src; protoc --cpp_out=. common/addressbook.proto
 
-libs/zlib/libz.a:
-	cd libs/zlib; ./configure && make libz.a
+lib/zlib/libz.a: lib/zlib/Makefile lib/zlib/zconf.h
+	cd lib/zlib && make libz.a
 
-clean:
+lib/zlib/Makefile:
+	cd lib/zlib && ./configure
+
+lib/zlib/zconf.h:
+	cd lib/zlib && ./configure
+
+cleanall: cleanbin cleanbld cleanlib
+
+cleanbin:
 	rm -rf bin 
+
+cleanbld:
 	rm -rf bld
-	rm src/common/addressbook.pb.cc src/common/addressbook.pb.h
-	cd libs/zlib; make clean
+	rm -f src/common/addressbook.pb.cc src/common/addressbook.pb.h
+
+cleanlib: lib/zlib/Makefile
+	cd lib/zlib && make clean && rm -f Makefile
