@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 #include "common/addressbook.pb.h"
-#include "common/welcome.h"
+#include "common/dummy.h"
 using namespace std;
 
 // Iterates though all people in the AddressBook and prints info about them.
@@ -38,7 +38,7 @@ void ListPeople(const tutorial::AddressBook& address_book) {
 // Main function:  Reads the entire address book from a file and prints all
 //   the information inside.
 int main(int argc, char* argv[]) {
-  Welcome::welcome();
+  cout << Dummy::reverse("\ndlrow olleh") << endl;
 
   // Verify that the version of the library that we linked against is
   // compatible with the version of the headers we compiled against.

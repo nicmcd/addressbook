@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 #include "common/addressbook.pb.h"
-#include "common/welcome.h"
+#include "common/dummy.h"
 using namespace std;
 
 // This function fills in a Person message based on user input.
@@ -53,7 +53,7 @@ void PromptForAddress(tutorial::Person* person) {
 //   adds one person based on user input, then writes it back out to the same
 //   file.
 int main(int argc, char* argv[]) {
-  Welcome::welcome();
+  cout << Dummy::reverse("\ndlrow olleh") << endl;
 
   // Verify that the version of the library that we linked against is
   // compatible with the version of the headers we compiled against.
