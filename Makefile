@@ -77,7 +77,7 @@ src/common/addressbook.pb.h: src/common/addressbook.proto
 	cd src; protoc --cpp_out=. common/addressbook.proto
 
 libs/zlib/libz.a:
-	cd libs/zlib; make libz.a
+	cd libs/zlib; ./configure && make libz.a
 
 clean:
 	rm -rf bin 
