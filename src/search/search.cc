@@ -1,6 +1,9 @@
+#include <zlib/zlib.h>
+
 #include <iostream>
 #include <fstream>
 #include <string>
+
 #include "common/addressbook.pb.h"
 #include "common/dummy.h"
 using namespace std;
@@ -39,6 +42,11 @@ void ListPeople(const tutorial::AddressBook& address_book) {
 //   the information inside.
 int main(int argc, char* argv[]) {
   cout << Dummy::reverse("\ndlrow olleh") << endl;
+
+  gzFile fout = gzopen("/tmp/delme.gz", "wb");
+  const char* msg = "Hello world\n";
+  gzwrite(fout, msg, strlen(msg));
+  gzclose(fout);
 
   // Verify that the version of the library that we linked against is
   // compatible with the version of the headers we compiled against.

@@ -1,6 +1,6 @@
 .SUFFIXES:
 
-CXX := g++-4.8
+CXX := g++
 CFLAGS := -Wall -Wextra -O2 -pedantic --std=c++11 -Wfatal-errors
 CFLAGS += -Isrc
 CFLAGS += $(shell pkg-config --cflags protobuf)
@@ -14,8 +14,8 @@ all: bin/manager bin/search bin/unit_tests
 bin/manager: bld/manager/manager.cc.o bld/common/addressbook.pb.cc.o bld/common/dummy.cc.o | bin
 	$(CXX) $(CFLAGS) -o bin/manager bld/manager/manager.cc.o bld/common/addressbook.pb.cc.o bld/common/dummy.cc.o $(LD_FLAGS)
 
-bin/search: bld/search/search.cc.o bld/common/addressbook.pb.cc.o bld/common/dummy.cc.o | bin
-	$(CXX) $(CFLAGS) -o bin/search bld/search/search.cc.o bld/common/addressbook.pb.cc.o bld/common/dummy.cc.o $(LD_FLAGS)
+bin/search: bld/search/search.cc.o bld/common/addressbook.pb.cc.o bld/common/dummy.cc.o lib/zlib/libz.a | bin
+	$(CXX) $(CFLAGS) -Llibs/zlib/ -o bin/search bld/search/search.cc.o bld/common/addressbook.pb.cc.o bld/common/dummy.cc.o $(LD_FLAGS) -lz
 
 bin/unit_tests: bld/common/dummy_TEST.cc.o bld/common/dummy.cc.o | bin
 	$(CXX) $(CFLAGS) -o bin/unit_tests /home/nic/.google/gtest-1.7.0/make/gtest_main.a bld/common/dummy_TEST.cc.o bld/common/dummy.cc.o $(LD_FLAGS)
@@ -76,5 +76,11 @@ src/common/addressbook.pb.cc: src/common/addressbook.proto
 src/common/addressbook.pb.h: src/common/addressbook.proto
 	cd src; protoc --cpp_out=. common/addressbook.proto
 
+libs/zlib/libz.a:
+	cd libs/zlib; make libz.a
+
 clean:
-	rm -rf bin bld src/common/addressbook.pb.cc src/common/addressbook.pb.h
+	rm -rf bin 
+	rm -rf bld
+	rm src/common/addressbook.pb.cc src/common/addressbook.pb.h
+	cd libs/zlib; make clean
