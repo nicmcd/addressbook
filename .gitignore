@@ -29,3 +29,7 @@
 
 # Protobufs
 *.pb.*
+
+# Binary and build directories
+bld
+bin
