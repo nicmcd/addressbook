@@ -1,4 +1,4 @@
-#include <zlib/zlib.h>
+#include <zlib.h>
 
 #include <iostream>
 #include <fstream>
