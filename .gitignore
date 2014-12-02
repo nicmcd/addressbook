@@ -33,3 +33,6 @@
 # Binary and build directories
 bld
 bin
+
+# Graphviz output
+*.png

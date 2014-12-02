@@ -11,11 +11,11 @@ LINT_FLAGS := --filter=-legal/copyright,-readability/streams,-build/namespaces
 
 all: bin/manager bin/search bin/unit_tests
 
-bin/manager: bld/src/manager/manager.cc.o bld/src/common/addressbook.pb.cc.o bld/src/common/dummy.cc.o | bin
-	$(CXX) $(CFLAGS) -o bin/manager bld/src/manager/manager.cc.o bld/src/common/addressbook.pb.cc.o bld/src/common/dummy.cc.o $(LD_FLAGS)
+bin/manager: bld/src/manager/manager.cc.o bld/src/common/libcommon.a | bin
+	$(CXX) $(CFLAGS) -o bin/manager bld/src/manager/manager.cc.o bld/src/common/libcommon.a $(LD_FLAGS)
 
-bin/search: bld/src/search/search.cc.o bld/src/common/addressbook.pb.cc.o bld/src/common/dummy.cc.o bld/libz.exists | bin
-	$(CXX) $(CFLAGS) -o bin/search bld/src/search/search.cc.o bld/src/common/addressbook.pb.cc.o bld/src/common/dummy.cc.o $(LD_FLAGS) -lz
+bin/search: bld/src/search/search.cc.o bld/src/common/libcommon.a | bin
+	$(CXX) $(CFLAGS) -o bin/search bld/src/search/search.cc.o bld/src/common/libcommon.a $(LD_FLAGS) -lz
 
 bin/unit_tests: bld/src/common/dummy_TEST.cc.o bld/src/common/dummy.cc.o | bin
 	$(CXX) $(CFLAGS) -o bin/unit_tests /home/nic/.google/gtest-1.7.0/make/gtest_main.a bld/src/common/dummy_TEST.cc.o bld/src/common/dummy.cc.o $(LD_FLAGS)
@@ -29,11 +29,14 @@ bld/src/manager/manager.cc.o: src/common/addressbook.pb.h bld/src/manager/manage
 bld/src/manager:
 	mkdir -p bld/src/manager
 
-bld/src/search/search.cc.o: src/common/addressbook.pb.h bld/src/search/search.cc.lint | bld/src/search 
+bld/src/search/search.cc.o: src/common/addressbook.pb.h bld/src/search/search.cc.lint bld/libz.exists | bld/src/search 
 	$(CXX) $(CFLAGS) -Ilib -c -o bld/src/search/search.cc.o src/search/search.cc
 
 bld/src/search:
 	mkdir -p bld/src/search
+
+bld/src/common/libcommon.a: bld/src/common/addressbook.pb.cc.o bld/src/common/dummy.cc.o | bld/src/common
+	ar cr bld/src/common/libcommon.a bld/src/common/addressbook.pb.cc.o bld/src/common/dummy.cc.o
 
 bld/src/common/addressbook.pb.cc.o: src/common/addressbook.pb.cc src/common/addressbook.pb.h | bld/src/common
 	$(CXX) $(CFLAGS) -c -o bld/src/common/addressbook.pb.cc.o src/common/addressbook.pb.cc
@@ -46,14 +49,6 @@ bld/src/common/dummy_TEST.cc.o: bld/src/common/dummy_TEST.cc.lint | bld/src/comm
 
 bld/src/common:
 	mkdir -p bld/src/common
-
-src/manager/manager.cc: src/common/addressbook.pb.h
-
-src/search/search.cc: src/common/addressbook.pb.h
-
-src/common/dummy.cc: src/common/dummy.h
-
-src/common/dummy_TEST.cc: src/common/dummy.h
 
 bld/src/manager/manager.cc.lint: src/manager/manager.cc | bld/src/manager
 	python ~/.google/cpplint.py --root=src $(LINT_FLAGS) src/manager/manager.cc && echo "linted" > bld/src/manager/manager.cc.lint
@@ -78,6 +73,14 @@ src/common/addressbook.pb.h: src/common/addressbook.proto
 
 bld/libz.exists:
 	ldconfig -p | egrep "^\s*libz\.so" > bld/libz.exists
+
+src/manager/manager.cc: src/common/addressbook.pb.h src/common/dummy.h
+
+src/search/search.cc: src/common/addressbook.pb.h src/common/dummy.h
+
+src/common/dummy.cc: src/common/dummy.h
+
+src/common/dummy_TEST.cc: src/common/dummy.h
 
 clean: cleanbin cleanbld 
 
