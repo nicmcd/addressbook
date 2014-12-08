@@ -1,55 +1,57 @@
 digraph Build {
-  // bin/manager
+  "bin/manager" [style=filled, fillcolor=green];
   "bld/src/manager/manager.cc.o" -> "bin/manager";
   "bld/src/common/libcommon.a" -> "bin/manager";
-  // bin/search
+  "bin/search" [style=filled, fillcolor=green];
   "bld/src/search/search.cc.o" -> "bin/search";
   "bld/src/common/libcommon.a" -> "bin/search";
-  // bin/unit_tests
+  "bin/unit_tests" [style=filled, fillcolor=green];
+  "bld/src/common/libcommon.a" [style=filled, fillcolor=red];
+  "bld/src/common/addressbook.pb.cc.o" -> "bld/src/common/libcommon.a";
+  "bld/src/common/dummy.cc.o" -> "bld/src/common/libcommon.a";
   "bld/src/common/dummy_TEST.cc.o" -> "bin/unit_tests";
   "bld/src/common/dummy.cc.o" -> "bin/unit_tests";
-  // bld/src/manager/manager.cc.o
+  "bld/src/manager/manager.cc.o" [style=filled, fillcolor=yellow];
   "src/common/addressbook.pb.h" -> "bld/src/manager/manager.cc.o";
   "bld/src/manager/manager.cc.lint" -> "bld/src/manager/manager.cc.o";
-  // bld/src/search/search.cc.o
+  "bld/src/search/search.cc.o" [style=filled, fillcolor=yellow];
   "src/common/addressbook.pb.h" -> "bld/src/search/search.cc.o";
   "bld/src/search/search.cc.lint" -> "bld/src/search/search.cc.o";
   "bld/libz.exists" -> "bld/src/search/search.cc.o";
-  // bld/src/common/libcommon.a
-  "bld/src/common/addressbook.pb.cc.o" -> "bld/src/common/libcommon.a";
-  "bld/src/common/dummy.cc.o" -> "bld/src/common/libcommon.a";
-  // bld/src/common/addressbook.pb.cc.o
+  "bld/src/common/addressbook.pb.cc.o" [style=filled, fillcolor=yellow];
   "src/common/addressbook.pb.cc" -> "bld/src/common/addressbook.pb.cc.o";
   "src/common/addressbook.pb.h" -> "bld/src/common/addressbook.pb.cc.o";
-  // bld/src/common/dummy.cc.o
+  "bld/src/common/dummy.cc.o" [style=filled, fillcolor=yellow];
   "bld/src/common/dummy.cc.lint" -> "bld/src/common/dummy.cc.o";
   "bld/src/common/dummy.h.lint" -> "bld/src/common/dummy.cc.o";
-  // bld/src/common/dummy_TEST.cc.o
+  "bld/src/common/dummy_TEST.cc.o" [style=filled, fillcolor=yellow];
   "bld/src/common/dummy_TEST.cc.lint" -> "bld/src/common/dummy_TEST.cc.o";
-  // bld/src/manager/manager.cc.lint
+  "bld/src/manager/manager.cc.lint" [style=filled, fillcolor=purple];
   "src/manager/manager.cc" -> "bld/src/manager/manager.cc.lint";
-  // bld/src/search/search.cc.lint
+  "bld/src/search/search.cc.lint" [style=filled, fillcolor=purple];
   "src/search/search.cc" -> "bld/src/search/search.cc.lint";
-  // bld/src/common/dummy.cc.lint
+  "bld/src/common/dummy.cc.lint" [style=filled, fillcolor=purple];
   "src/common/dummy.cc" -> "bld/src/common/dummy.cc.lint";
-  // bld/src/common/dummy.h.lint
+  "bld/src/common/dummy.h.lint" [style=filled, fillcolor=purple];
   "src/common/dummy.h" -> "bld/src/common/dummy.h.lint";
-  // bld/src/common/dummy_TEST.cc.lint
+  "bld/src/common/dummy_TEST.cc.lint" [style=filled, fillcolor=purple];
   "src/common/dummy_TEST.cc" -> "bld/src/common/dummy_TEST.cc.lint";
-  // src/common/addressbook.pb.cc
+  "src/common/addressbook.pb.cc" [style=filled, fillcolor=orange];
   "src/common/addressbook.proto" -> "src/common/addressbook.pb.cc";
-  // src/common/addressbook.pb.h
+  "src/common/addressbook.pb.h" [style=filled, fillcolor=orange];
   "src/common/addressbook.proto" -> "src/common/addressbook.pb.h";
-  // bld/libz.exists
+  "bld/libz.exists" [style=filled, fillcolor=gray];
   "<system>" -> "bld/libz.exists";
-  // src/manager/manager.cc
+  "src/manager/manager.cc" [style=filled, fillcolor=orange];
   "src/common/addressbook.pb.h" -> "src/manager/manager.cc";
-  "src/common/dummy.pb.h" -> "src/manager/manager.cc";
-  // src/search/search.cc
+  "src/common/dummy.h" -> "src/manager/manager.cc";
+  "src/search/search.cc" [style=filled, fillcolor=orange];
   "src/common/addressbook.pb.h" -> "src/search/search.cc";
-  "src/common/dummy.pb.h" -> "src/search/search.cc";
-  // src/common/dummy.cc
+  "src/common/dummy.h" -> "src/search/search.cc";
+  "src/common/dummy.cc" [style=filled, fillcolor=orange];
   "src/common/dummy.h" -> "src/common/dummy.cc";
-  // src/common/dummy_TEST.cc
+  "src/common/dummy_TEST.cc" [style=filled, fillcolor=orange];
   "src/common/dummy.h" -> "src/common/dummy_TEST.cc";
+  "src/common/addressbook.proto" [style=filled, fillcolor=blue];
+  "src/common/dummy.h" [style=filled, fillcolor=orange];
 }
