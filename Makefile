@@ -47,7 +47,7 @@ bld/src/manager/manager.cc.o: src/common/addressbook.pb.h bld/src/manager/manage
 	$(CXX) $(CFLAGS) -c -o bld/src/manager/manager.cc.o src/manager/manager.cc
 
 bld/src/search/search.cc.o: src/common/addressbook.pb.h bld/src/search/search.cc.lint bld/libz.exists | bld/src/search 
-	$(CXX) $(CFLAGS) -Ilib -c -o bld/src/search/search.cc.o src/search/search.cc
+	$(CXX) $(CFLAGS) -c -o bld/src/search/search.cc.o src/search/search.cc
 
 bld/src/common/addressbook.pb.cc.o: src/common/addressbook.pb.cc src/common/addressbook.pb.h | bld/src/common
 	$(CXX) $(CFLAGS) -c -o bld/src/common/addressbook.pb.cc.o src/common/addressbook.pb.cc

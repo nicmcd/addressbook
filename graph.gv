@@ -42,16 +42,17 @@ digraph Build {
   "src/common/addressbook.proto" -> "src/common/addressbook.pb.h";
   "bld/libz.exists" [style=filled, fillcolor=gray];
   "<system>" -> "bld/libz.exists";
-  "src/manager/manager.cc" [style=filled, fillcolor=orange];
+  "src/manager/manager.cc" [shape=box, style=filled, fillcolor=orange];
   "src/common/addressbook.pb.h" -> "src/manager/manager.cc";
   "src/common/dummy.h" -> "src/manager/manager.cc";
-  "src/search/search.cc" [style=filled, fillcolor=orange];
+  "src/search/search.cc" [shape=box, style=filled, fillcolor=orange];
   "src/common/addressbook.pb.h" -> "src/search/search.cc";
   "src/common/dummy.h" -> "src/search/search.cc";
-  "src/common/dummy.cc" [style=filled, fillcolor=orange];
+  "src/common/dummy.cc" [shape=box, style=filled, fillcolor=orange];
   "src/common/dummy.h" -> "src/common/dummy.cc";
-  "src/common/dummy_TEST.cc" [style=filled, fillcolor=orange];
+  "src/common/dummy_TEST.cc" [shape=box, style=filled, fillcolor=orange];
   "src/common/dummy.h" -> "src/common/dummy_TEST.cc";
-  "src/common/addressbook.proto" [style=filled, fillcolor=blue];
-  "src/common/dummy.h" [style=filled, fillcolor=orange];
+  "src/common/addressbook.proto" [shape=box, style=filled, fillcolor=blue];
+  "src/common/dummy.h" [shape=box, style=filled, fillcolor=orange];
+  "<system>" [shape=diamond];
 }
