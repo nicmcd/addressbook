@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "common/addressbook.pb.h"
+#include "common/AddressBook.pb.h"
 #include "common/dummy.h"
 using namespace std;
 
@@ -31,18 +31,18 @@ void PromptForAddress(tutorial::Person* person) {
       break;
     }
 
-    tutorial::Person::PhoneNumber* phone_number = person->add_phone();
+    tutorial::PhoneNumber* phone_number = person->add_phone();
     phone_number->set_number(number);
 
     cout << "Is this a mobile, home, or work phone? ";
     string type;
     getline(cin, type);
     if (type == "mobile") {
-      phone_number->set_type(tutorial::Person::MOBILE);
+      phone_number->set_type(tutorial::PhoneNumber::MOBILE);
     } else if (type == "home") {
-      phone_number->set_type(tutorial::Person::HOME);
+      phone_number->set_type(tutorial::PhoneNumber::HOME);
     } else if (type == "work") {
-      phone_number->set_type(tutorial::Person::WORK);
+      phone_number->set_type(tutorial::PhoneNumber::WORK);
     } else {
       cout << "Unknown phone type.  Using default." << endl;
     }

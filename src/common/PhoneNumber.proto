@@ -1,0 +1,12 @@
+package tutorial;
+
+message PhoneNumber {
+  required string number = 1;
+
+  enum PhoneType {
+    MOBILE = 0;
+    HOME = 1;
+    WORK = 2;
+  }
+  optional PhoneType type = 2 [default = HOME];
+}

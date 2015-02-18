@@ -9,7 +9,7 @@ LINT_FLAGS := --filter=-legal/copyright,-readability/streams,-build/namespaces
 
 .PHONY: all clean cleanbin cleanbld
 
-all: bin/manager bin/search bin/unit_tests
+all: bin/manager bin/search bin/unit_tests bin/graph.png
 
 ########################################
 ### Directory building
@@ -18,6 +18,9 @@ bin:
 
 bld:
 	mkdir -p bld
+
+bld/src/common:
+	mkdir -p bld/src/common
 
 bld/src/manager:
 	mkdir -p bld/src/manager
@@ -38,25 +41,31 @@ bin/unit_tests: bld/src/common/dummy_TEST.cc.o bld/src/common/dummy.cc.o | bin
 
 ########################################
 ### Shared static library archive
-bld/src/common/libcommon.a: bld/src/common/addressbook.pb.cc.o bld/src/common/dummy.cc.o | bld/src/common
-	ar cr bld/src/common/libcommon.a bld/src/common/addressbook.pb.cc.o bld/src/common/dummy.cc.o
+bld/src/common/libcommon.a: bld/src/common/AddressBook.pb.cc.o bld/src/common/Person.pb.cc.o bld/src/common/PhoneNumber.pb.cc.o bld/src/common/dummy.cc.o | bld/src/common
+	ar cr bld/src/common/libcommon.a bld/src/common/AddressBook.pb.cc.o bld/src/common/Person.pb.cc.o bld/src/common/PhoneNumber.pb.cc.o bld/src/common/dummy.cc.o
 
 ########################################
 ### Object file compilation
-bld/src/manager/manager.cc.o: src/common/addressbook.pb.h bld/src/manager/manager.cc.lint | bld/src/manager 
+bld/src/manager/manager.cc.o: src/common/AddressBook.pb.h bld/src/manager/manager.cc.lint | bld/src/manager
 	$(CXX) $(CFLAGS) -c -o bld/src/manager/manager.cc.o src/manager/manager.cc
 
-bld/src/search/search.cc.o: src/common/addressbook.pb.h bld/src/search/search.cc.lint bld/libz.exists | bld/src/search 
+bld/src/search/search.cc.o: src/common/AddressBook.pb.h bld/src/search/search.cc.lint bld/libz.exists | bld/src/search
 	$(CXX) $(CFLAGS) -c -o bld/src/search/search.cc.o src/search/search.cc
 
-bld/src/common/addressbook.pb.cc.o: src/common/addressbook.pb.cc src/common/addressbook.pb.h | bld/src/common
-	$(CXX) $(CFLAGS) -c -o bld/src/common/addressbook.pb.cc.o src/common/addressbook.pb.cc
-
-bld/src/common/dummy.cc.o: bld/src/common/dummy.cc.lint bld/src/common/dummy.h.lint | bld/src/common 
+bld/src/common/dummy.cc.o: bld/src/common/dummy.cc.lint bld/src/common/dummy.h.lint | bld/src/common
 	$(CXX) $(CFLAGS) -c -o bld/src/common/dummy.cc.o src/common/dummy.cc
 
-bld/src/common/dummy_TEST.cc.o: bld/src/common/dummy_TEST.cc.lint | bld/src/common 
+bld/src/common/dummy_TEST.cc.o: bld/src/common/dummy_TEST.cc.lint | bld/src/common
 	$(CXX) $(CFLAGS) -I/home/nic/.google/gtest-1.7.0/include -c -o bld/src/common/dummy_TEST.cc.o src/common/dummy_TEST.cc
+
+bld/src/common/AddressBook.pb.cc.o: src/common/AddressBook.pb.cc src/common/AddressBook.pb.h | bld/src/common
+	$(CXX) $(CFLAGS) -c -o bld/src/common/AddressBook.pb.cc.o src/common/AddressBook.pb.cc
+
+bld/src/common/Person.pb.cc.o: src/common/Person.pb.cc src/common/Person.pb.h | bld/src/common
+	$(CXX) $(CFLAGS) -c -o bld/src/common/Person.pb.cc.o src/common/Person.pb.cc
+
+bld/src/common/PhoneNumber.pb.cc.o: src/common/PhoneNumber.pb.cc src/common/PhoneNumber.pb.h | bld/src/common
+	$(CXX) $(CFLAGS) -c -o bld/src/common/PhoneNumber.pb.cc.o src/common/PhoneNumber.pb.cc
 
 ########################################
 ### C++ linting
@@ -76,12 +85,24 @@ bld/src/common/dummy_TEST.cc.lint: src/common/dummy_TEST.cc | bld/src/common
 	python ~/.google/cpplint.py --root=src $(LINT_FLAGS) src/common/dummy_TEST.cc && echo "linted" > bld/src/common/dummy_TEST.cc.lint
 
 ########################################
-### Protobuf code generation
-src/common/addressbook.pb.cc: src/common/addressbook.proto
-	cd src; protoc --cpp_out=. common/addressbook.proto
+### Protobuf code generation & dependencies
+src/common/AddressBook.pb.cc: src/common/AddressBook.proto src/common/AddressBook.pb.h
+	cd src; protoc --cpp_out=. common/AddressBook.proto
 
-src/common/addressbook.pb.h: src/common/addressbook.proto
-	cd src; protoc --cpp_out=. common/addressbook.proto
+src/common/AddressBook.pb.h: src/common/AddressBook.proto src/common/Person.pb.h
+	cd src; protoc --cpp_out=. common/AddressBook.proto
+
+src/common/Person.pb.cc: src/common/Person.proto src/common/Person.pb.h
+	cd src; protoc --cpp_out=. common/Person.proto
+
+src/common/Person.pb.h: src/common/Person.proto src/common/PhoneNumber.pb.h
+	cd src; protoc --cpp_out=. common/Person.proto
+
+src/common/PhoneNumber.pb.cc: src/common/PhoneNumber.proto src/common/PhoneNumber.pb.h
+	cd src; protoc --cpp_out=. common/PhoneNumber.proto
+
+src/common/PhoneNumber.pb.h: src/common/PhoneNumber.proto
+	cd src; protoc --cpp_out=. common/PhoneNumber.proto
 
 ########################################
 ### Library existence check
@@ -90,9 +111,9 @@ bld/libz.exists: | bld
 
 ########################################
 ### Source dependencies
-src/manager/manager.cc: src/common/addressbook.pb.h src/common/dummy.h
+src/manager/manager.cc: src/common/AddressBook.pb.h src/common/dummy.h
 
-src/search/search.cc: src/common/addressbook.pb.h src/common/dummy.h
+src/search/search.cc: src/common/AddressBook.pb.h src/common/dummy.h
 
 src/common/dummy.cc: src/common/dummy.h
 
@@ -100,15 +121,26 @@ src/common/dummy_TEST.cc: src/common/dummy.h
 
 src/common/dummy.h:
 
-src/common/addressbook.proto:
+src/common/AddressBook.proto: src/common/Person.proto
+
+src/common/Person.proto: src/common/PhoneNumber.proto
+
+src/common/PhoneNumber.proto:
+
+########################################
+### Dependency graph
+bin/graph.png: graph.gv | bin
+	dot -Tpng graph.gv -o bin/graph.png
 
 ########################################
 ### Cleaning
-clean: cleanbin cleanbld 
+clean: cleanbin cleanbld
 
 cleanbin:
-	rm -rf bin 
+	rm -rf bin
 
 cleanbld:
 	rm -rf bld
-	rm -f src/common/addressbook.pb.cc src/common/addressbook.pb.h
+	rm -f src/common/AddressBook.pb.cc src/common/AddressBook.pb.h
+	rm -f src/common/Person.pb.cc src/common/Person.pb.h
+	rm -f src/common/PhoneNumber.pb.cc src/common/PhoneNumber.pb.h

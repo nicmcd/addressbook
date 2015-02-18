@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 
-#include "common/addressbook.pb.h"
+#include "common/AddressBook.pb.h"
 #include "common/dummy.h"
 using namespace std;
 
@@ -20,16 +20,16 @@ void ListPeople(const tutorial::AddressBook& address_book) {
     }
 
     for (int j = 0; j < person.phone_size(); j++) {
-      const tutorial::Person::PhoneNumber& phone_number = person.phone(j);
+      const tutorial::PhoneNumber& phone_number = person.phone(j);
 
       switch (phone_number.type()) {
-        case tutorial::Person::MOBILE:
+        case tutorial::PhoneNumber::MOBILE:
           cout << "  Mobile phone #: ";
           break;
-        case tutorial::Person::HOME:
+        case tutorial::PhoneNumber::HOME:
           cout << "  Home phone #: ";
           break;
-        case tutorial::Person::WORK:
+        case tutorial::PhoneNumber::WORK:
           cout << "  Work phone #: ";
           break;
       }
