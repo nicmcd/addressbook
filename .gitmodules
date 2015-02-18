@@ -1,0 +1,6 @@
+[submodule "gtest"]
+	path = gtest
+	url = git@github.com:nicmcd/gtest.git
+[submodule "cpplint"]
+	path = cpplint
+	url = git@github.com:nicmcd/cpplint.git

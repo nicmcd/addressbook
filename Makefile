@@ -36,8 +36,8 @@ bin/manager: bld/src/manager/manager.cc.o bld/src/common/libcommon.a | bin
 bin/search: bld/src/search/search.cc.o bld/src/common/libcommon.a | bin
 	$(CXX) $(CFLAGS) -o bin/search bld/src/search/search.cc.o bld/src/common/libcommon.a $(LD_FLAGS) -lz
 
-bin/unit_tests: bld/src/common/dummy_TEST.cc.o bld/src/common/dummy.cc.o | bin
-	$(CXX) $(CFLAGS) -o bin/unit_tests /home/nic/.google/gtest-1.7.0/make/gtest_main.a bld/src/common/dummy_TEST.cc.o bld/src/common/dummy.cc.o $(LD_FLAGS)
+bin/unit_tests: bld/src/common/dummy_TEST.cc.o bld/src/common/dummy.cc.o gtest/make/gtest_main.a | bin
+	$(CXX) $(CFLAGS) -o bin/unit_tests gtest/make/gtest_main.a bld/src/common/dummy_TEST.cc.o bld/src/common/dummy.cc.o $(LD_FLAGS)
 
 ########################################
 ### Shared static library archive
@@ -56,7 +56,7 @@ bld/src/common/dummy.cc.o: bld/src/common/dummy.cc.lint bld/src/common/dummy.h.l
 	$(CXX) $(CFLAGS) -c -o bld/src/common/dummy.cc.o src/common/dummy.cc
 
 bld/src/common/dummy_TEST.cc.o: bld/src/common/dummy_TEST.cc.lint | bld/src/common
-	$(CXX) $(CFLAGS) -I/home/nic/.google/gtest-1.7.0/include -c -o bld/src/common/dummy_TEST.cc.o src/common/dummy_TEST.cc
+	$(CXX) $(CFLAGS) -Igtest/include -c -o bld/src/common/dummy_TEST.cc.o src/common/dummy_TEST.cc
 
 bld/src/common/AddressBook.pb.cc.o: src/common/AddressBook.pb.cc src/common/AddressBook.pb.h | bld/src/common
 	$(CXX) $(CFLAGS) -c -o bld/src/common/AddressBook.pb.cc.o src/common/AddressBook.pb.cc
@@ -70,19 +70,19 @@ bld/src/common/PhoneNumber.pb.cc.o: src/common/PhoneNumber.pb.cc src/common/Phon
 ########################################
 ### C++ linting
 bld/src/manager/manager.cc.lint: src/manager/manager.cc | bld/src/manager
-	python ~/.google/cpplint.py --root=src $(LINT_FLAGS) src/manager/manager.cc && echo "linted" > bld/src/manager/manager.cc.lint
+	python cpplint/cpplint.py --root=src $(LINT_FLAGS) src/manager/manager.cc && echo "linted" > bld/src/manager/manager.cc.lint
 
 bld/src/search/search.cc.lint: src/search/search.cc | bld/src/search
-	python ~/.google/cpplint.py --root=src $(LINT_FLAGS) src/search/search.cc && echo "linted" > bld/src/search/search.cc.lint
+	python cpplint/cpplint.py --root=src $(LINT_FLAGS) src/search/search.cc && echo "linted" > bld/src/search/search.cc.lint
 
 bld/src/common/dummy.cc.lint: src/common/dummy.cc | bld/src/common
-	python ~/.google/cpplint.py --root=src $(LINT_FLAGS) src/common/dummy.cc && echo "linted" > bld/src/common/dummy.cc.lint
+	python cpplint/cpplint.py --root=src $(LINT_FLAGS) src/common/dummy.cc && echo "linted" > bld/src/common/dummy.cc.lint
 
 bld/src/common/dummy.h.lint: src/common/dummy.h | bld/src/common
-	python ~/.google/cpplint.py --root=src $(LINT_FLAGS) src/common/dummy.h && echo "linted" > bld/src/common/dummy.h.lint
+	python cpplint/cpplint.py --root=src $(LINT_FLAGS) src/common/dummy.h && echo "linted" > bld/src/common/dummy.h.lint
 
 bld/src/common/dummy_TEST.cc.lint: src/common/dummy_TEST.cc | bld/src/common
-	python ~/.google/cpplint.py --root=src $(LINT_FLAGS) src/common/dummy_TEST.cc && echo "linted" > bld/src/common/dummy_TEST.cc.lint
+	python cpplint/cpplint.py --root=src $(LINT_FLAGS) src/common/dummy_TEST.cc && echo "linted" > bld/src/common/dummy_TEST.cc.lint
 
 ########################################
 ### Protobuf code generation & dependencies
@@ -128,19 +128,31 @@ src/common/Person.proto: src/common/PhoneNumber.proto
 src/common/PhoneNumber.proto:
 
 ########################################
+### GTest submodule
+gtest/make/gtest_main.a:
+	cd gtest/make; make gtest_main.a
+
+########################################
 ### Dependency graph
 bin/graph.png: graph.gv | bin
 	dot -Tpng graph.gv -o bin/graph.png
 
 ########################################
 ### Cleaning
-clean: cleanbin cleanbld
+clean: cleanbin cleanpb cleanbld
+
+cleanall: cleanbin cleanpb cleanbld cleansub
 
 cleanbin:
 	rm -rf bin
 
 cleanbld:
 	rm -rf bld
+
+cleanpb:
 	rm -f src/common/AddressBook.pb.cc src/common/AddressBook.pb.h
 	rm -f src/common/Person.pb.cc src/common/Person.pb.h
 	rm -f src/common/PhoneNumber.pb.cc src/common/PhoneNumber.pb.h
+
+cleansub:
+	cd gtest/make; make clean
