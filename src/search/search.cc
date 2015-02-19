@@ -41,6 +41,8 @@ void ListPeople(const tutorial::AddressBook& address_book) {
 // Main function:  Reads the entire address book from a file and prints all
 //   the information inside.
 int main(int argc, char* argv[]) {
+  int ret = 0;
+
   cout << Dummy::reverse("\ndlrow olleh") << endl;
 
   gzFile fout = gzopen("/tmp/delme.gz", "wb");
@@ -54,23 +56,25 @@ int main(int argc, char* argv[]) {
 
   if (argc != 2) {
     cerr << "Usage:  " << argv[0] << " ADDRESS_BOOK_FILE" << endl;
-    return -1;
+    ret = -1;
   }
 
-  tutorial::AddressBook address_book;
+  if (ret == 0) {
+    tutorial::AddressBook address_book;
 
-  {
     // Read the existing address book.
     fstream input(argv[1], ios::in | ios::binary);
     if (!address_book.ParseFromIstream(&input)) {
       cerr << "Failed to parse address book." << endl;
-      return -1;
+      ret = -1;
+    }
+
+    if (ret == 0) {
+      ListPeople(address_book);
     }
   }
 
-  ListPeople(address_book);
-
-  // Optional:  Delete all global objects allocated by libprotobuf.
+  // deallocate protobuf stuff
   google::protobuf::ShutdownProtobufLibrary();
 
   return 0;

@@ -53,6 +53,8 @@ void PromptForAddress(tutorial::Person* person) {
 //   adds one person based on user input, then writes it back out to the same
 //   file.
 int main(int argc, char* argv[]) {
+  int ret = 0;
+
   cout << Dummy::reverse("\ndlrow olleh") << endl;
 
   // Verify that the version of the library that we linked against is
@@ -61,31 +63,35 @@ int main(int argc, char* argv[]) {
 
   if (argc != 2) {
     cerr << "Usage:  " << argv[0] << " ADDRESS_BOOK_FILE" << endl;
-    return -1;
+    ret = -1;
   }
 
-  tutorial::AddressBook address_book;
+  if (ret == 0) {
+    tutorial::AddressBook address_book;
 
-  {
-    // Read the existing address book.
-    fstream input(argv[1], ios::in | ios::binary);
-    if (!input) {
-      cout << argv[1] << ": File not found.  Creating a new file." << endl;
-    } else if (!address_book.ParseFromIstream(&input)) {
-      cerr << "Failed to parse address book." << endl;
-      return -1;
+    {
+      // Read the existing address book.
+      fstream input(argv[1], ios::in | ios::binary);
+      if (!input) {
+        cout << argv[1] << ": File not found.  Creating a new file." << endl;
+      } else if (!address_book.ParseFromIstream(&input)) {
+        cerr << "Failed to parse address book." << endl;
+        ret = -1;
+      }
     }
-  }
 
-  // Add an address.
-  PromptForAddress(address_book.add_person());
+    if (ret == 0) {
+      // Add an address.
+      PromptForAddress(address_book.add_person());
 
-  {
-    // Write the new address book back to disk.
-    fstream output(argv[1], ios::out | ios::trunc | ios::binary);
-    if (!address_book.SerializeToOstream(&output)) {
-      cerr << "Failed to write address book." << endl;
-      return -1;
+      {
+        // Write the new address book back to disk.
+        fstream output(argv[1], ios::out | ios::trunc | ios::binary);
+        if (!address_book.SerializeToOstream(&output)) {
+          cerr << "Failed to write address book." << endl;
+          ret = -1;
+        }
+      }
     }
   }
 
