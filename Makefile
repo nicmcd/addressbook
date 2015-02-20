@@ -3,8 +3,10 @@
 CXX := g++
 CFLAGS := -Wall -Wextra -O2 -pedantic --std=c++11 -Wfatal-errors
 CFLAGS += -Isrc -Igen
+CFLAGS += $(shell pkg-config --cflags zlib)
 CFLAGS += $(shell pkg-config --cflags protobuf)
-LD_FLAGS := $(shell pkg-config --libs protobuf)
+LD_FLAGS := $(shell pkg-config --libs zlib)
+LD_FLAGS += $(shell pkg-config --libs protobuf)
 LINT_FLAGS := --filter=-legal/copyright,-readability/streams,-build/namespaces
 
 .PHONY: all clean cleanall cleanbin cleangen cleanbld cleansub
@@ -46,7 +48,7 @@ bin/manager: bld/manager/manager.cc.o bld/common/libcommon.a | bin
 	$(CXX) $(CFLAGS) -o bin/manager bld/manager/manager.cc.o bld/common/libcommon.a $(LD_FLAGS)
 
 bin/search: bld/search/search.cc.o bld/common/libcommon.a | bin
-	$(CXX) $(CFLAGS) -o bin/search bld/search/search.cc.o bld/common/libcommon.a $(LD_FLAGS) -lz
+	$(CXX) $(CFLAGS) -o bin/search bld/search/search.cc.o bld/common/libcommon.a $(LD_FLAGS)
 
 bin/unit_tests: bld/common/dummy_TEST.cc.o bld/common/dummy.cc.o gtest/make/gtest_main.a | bin
 	$(CXX) $(CFLAGS) -o bin/unit_tests gtest/make/gtest_main.a bld/common/dummy_TEST.cc.o bld/common/dummy.cc.o $(LD_FLAGS)
@@ -61,7 +63,7 @@ bld/common/libcommon.a: bld/common/AddressBook.pb.cc.o bld/common/Person.pb.cc.o
 bld/manager/manager.cc.o: gen/common/AddressBook.pb.h bld/manager/manager.cc.lint | bld/manager
 	$(CXX) $(CFLAGS) -c -o bld/manager/manager.cc.o src/manager/manager.cc
 
-bld/search/search.cc.o: gen/common/AddressBook.pb.h bld/search/search.cc.lint bld/libz.exists | bld/search
+bld/search/search.cc.o: gen/common/AddressBook.pb.h bld/search/search.cc.lint | bld/search
 	$(CXX) $(CFLAGS) -c -o bld/search/search.cc.o src/search/search.cc
 
 bld/common/dummy.cc.o: bld/common/dummy.cc.lint bld/common/dummy.h.lint | bld/common
@@ -115,11 +117,6 @@ gen/common/PhoneNumber.pb.cc: src/common/PhoneNumber.proto gen/common/PhoneNumbe
 
 gen/common/PhoneNumber.pb.h: src/common/PhoneNumber.proto | gen/common
 	cd src; protoc --cpp_out=../gen common/PhoneNumber.proto
-
-########################################
-### Library existence check
-bld/libz.exists: | bld
-	ldconfig -p | egrep "^\s*libz\.so" > bld/libz.exists
 
 ########################################
 ### Source dependencies
