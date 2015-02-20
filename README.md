@@ -13,3 +13,12 @@ There is also a graphviz graph definition that graphically shows the dependencie
 The Makefile builds the graph file as well. The application utilizes Google's 
 Test framework as well as Google's cpplint syntax checker. The Makefile handles
 all of this.
+
+## Build Process
+```bash
+git clone git@github.com:nicmcd/addressbook.git
+cd addressbook
+git submodule init
+git submodule update
+make
+```
