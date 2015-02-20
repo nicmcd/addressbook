@@ -1,97 +1,97 @@
 digraph Build {
   "bin/manager" [style=filled, fillcolor=green];
-  "bld/src/manager/manager.cc.o" -> "bin/manager";
-  "bld/src/common/libcommon.a" -> "bin/manager";
+  "bld/manager/manager.cc.o" -> "bin/manager";
+  "bld/common/libcommon.a" -> "bin/manager";
 
   "bin/search" [style=filled, fillcolor=green];
-  "bld/src/search/search.cc.o" -> "bin/search";
-  "bld/src/common/libcommon.a" -> "bin/search";
+  "bld/search/search.cc.o" -> "bin/search";
+  "bld/common/libcommon.a" -> "bin/search";
 
   "bin/unit_tests" [style=filled, fillcolor=green];
-  "bld/src/common/dummy_TEST.cc.o" -> "bin/unit_tests";
-  "bld/src/common/dummy.cc.o" -> "bin/unit_tests";
+  "bld/common/dummy_TEST.cc.o" -> "bin/unit_tests";
+  "bld/common/dummy.cc.o" -> "bin/unit_tests";
 
-  "bld/src/common/libcommon.a" [style=filled, fillcolor=red];
-  "bld/src/common/AddressBook.pb.cc.o" -> "bld/src/common/libcommon.a";
-  "bld/src/common/Person.pb.cc.o" -> "bld/src/common/libcommon.a";
-  "bld/src/common/PhoneNumber.pb.cc.o" -> "bld/src/common/libcommon.a";
-  "bld/src/common/dummy.cc.o" -> "bld/src/common/libcommon.a";
+  "bld/common/libcommon.a" [style=filled, fillcolor=red];
+  "bld/common/AddressBook.pb.cc.o" -> "bld/common/libcommon.a";
+  "bld/common/Person.pb.cc.o" -> "bld/common/libcommon.a";
+  "bld/common/PhoneNumber.pb.cc.o" -> "bld/common/libcommon.a";
+  "bld/common/dummy.cc.o" -> "bld/common/libcommon.a";
 
-  "bld/src/manager/manager.cc.o" [style=filled, fillcolor=yellow];
-  "src/common/AddressBook.pb.h" -> "bld/src/manager/manager.cc.o";
-  "bld/src/manager/manager.cc.lint" -> "bld/src/manager/manager.cc.o";
+  "bld/manager/manager.cc.o" [style=filled, fillcolor=yellow];
+  "gen/common/AddressBook.pb.h" -> "bld/manager/manager.cc.o";
+  "bld/manager/manager.cc.lint" -> "bld/manager/manager.cc.o";
 
-  "bld/src/search/search.cc.o" [style=filled, fillcolor=yellow];
-  "src/common/AddressBook.pb.h" -> "bld/src/search/search.cc.o";
-  "bld/src/search/search.cc.lint" -> "bld/src/search/search.cc.o";
-  "bld/libz.exists" -> "bld/src/search/search.cc.o";
+  "bld/search/search.cc.o" [style=filled, fillcolor=yellow];
+  "gen/common/AddressBook.pb.h" -> "bld/search/search.cc.o";
+  "bld/search/search.cc.lint" -> "bld/search/search.cc.o";
+  "bld/libz.exists" -> "bld/search/search.cc.o";
 
-  "bld/src/common/AddressBook.pb.cc.o" [style=filled, fillcolor=yellow];
-  "src/common/AddressBook.pb.cc" -> "bld/src/common/AddressBook.pb.cc.o";
-  "src/common/AddressBook.pb.h" -> "bld/src/common/AddressBook.pb.cc.o";
+  "bld/common/AddressBook.pb.cc.o" [style=filled, fillcolor=yellow];
+  "gen/common/AddressBook.pb.cc" -> "bld/common/AddressBook.pb.cc.o";
+  "gen/common/AddressBook.pb.h" -> "bld/common/AddressBook.pb.cc.o";
 
-  "bld/src/common/Person.pb.cc.o" [style=filled, fillcolor=yellow];
-  "src/common/Person.pb.cc" -> "bld/src/common/Person.pb.cc.o";
-  "src/common/Person.pb.h" -> "bld/src/common/Person.pb.cc.o";
+  "bld/common/Person.pb.cc.o" [style=filled, fillcolor=yellow];
+  "gen/common/Person.pb.cc" -> "bld/common/Person.pb.cc.o";
+  "gen/common/Person.pb.h" -> "bld/common/Person.pb.cc.o";
 
-  "bld/src/common/PhoneNumber.pb.cc.o" [style=filled, fillcolor=yellow];
-  "src/common/PhoneNumber.pb.cc" -> "bld/src/common/PhoneNumber.pb.cc.o";
-  "src/common/PhoneNumber.pb.h" -> "bld/src/common/PhoneNumber.pb.cc.o";
+  "bld/common/PhoneNumber.pb.cc.o" [style=filled, fillcolor=yellow];
+  "gen/common/PhoneNumber.pb.cc" -> "bld/common/PhoneNumber.pb.cc.o";
+  "gen/common/PhoneNumber.pb.h" -> "bld/common/PhoneNumber.pb.cc.o";
 
-  "bld/src/common/dummy.cc.o" [style=filled, fillcolor=yellow];
-  "bld/src/common/dummy.cc.lint" -> "bld/src/common/dummy.cc.o";
-  "bld/src/common/dummy.h.lint" -> "bld/src/common/dummy.cc.o";
+  "bld/common/dummy.cc.o" [style=filled, fillcolor=yellow];
+  "bld/common/dummy.cc.lint" -> "bld/common/dummy.cc.o";
+  "bld/common/dummy.h.lint" -> "bld/common/dummy.cc.o";
 
-  "bld/src/common/dummy_TEST.cc.o" [style=filled, fillcolor=yellow];
-  "bld/src/common/dummy_TEST.cc.lint" -> "bld/src/common/dummy_TEST.cc.o";
+  "bld/common/dummy_TEST.cc.o" [style=filled, fillcolor=yellow];
+  "bld/common/dummy_TEST.cc.lint" -> "bld/common/dummy_TEST.cc.o";
 
-  "bld/src/manager/manager.cc.lint" [style=filled, fillcolor=purple];
-  "src/manager/manager.cc" -> "bld/src/manager/manager.cc.lint";
+  "bld/manager/manager.cc.lint" [style=filled, fillcolor=purple];
+  "src/manager/manager.cc" -> "bld/manager/manager.cc.lint";
 
-  "bld/src/search/search.cc.lint" [style=filled, fillcolor=purple];
-  "src/search/search.cc" -> "bld/src/search/search.cc.lint";
+  "bld/search/search.cc.lint" [style=filled, fillcolor=purple];
+  "src/search/search.cc" -> "bld/search/search.cc.lint";
 
-  "bld/src/common/dummy.cc.lint" [style=filled, fillcolor=purple];
-  "src/common/dummy.cc" -> "bld/src/common/dummy.cc.lint";
+  "bld/common/dummy.cc.lint" [style=filled, fillcolor=purple];
+  "src/common/dummy.cc" -> "bld/common/dummy.cc.lint";
 
-  "bld/src/common/dummy.h.lint" [style=filled, fillcolor=purple];
-  "src/common/dummy.h" -> "bld/src/common/dummy.h.lint";
+  "bld/common/dummy.h.lint" [style=filled, fillcolor=purple];
+  "src/common/dummy.h" -> "bld/common/dummy.h.lint";
 
-  "bld/src/common/dummy_TEST.cc.lint" [style=filled, fillcolor=purple];
-  "src/common/dummy_TEST.cc" -> "bld/src/common/dummy_TEST.cc.lint";
+  "bld/common/dummy_TEST.cc.lint" [style=filled, fillcolor=purple];
+  "src/common/dummy_TEST.cc" -> "bld/common/dummy_TEST.cc.lint";
 
-  "src/common/AddressBook.pb.cc" [style=filled, fillcolor=orange];
-  "src/common/AddressBook.proto" -> "src/common/AddressBook.pb.cc";
-  "src/common/AddressBook.pb.h" -> "src/common/AddressBook.pb.cc";
+  "gen/common/AddressBook.pb.cc" [style=filled, fillcolor=orange];
+  "src/common/AddressBook.proto" -> "gen/common/AddressBook.pb.cc";
+  "gen/common/AddressBook.pb.h" -> "gen/common/AddressBook.pb.cc";
 
-  "src/common/AddressBook.pb.h" [style=filled, fillcolor=orange];
-  "src/common/AddressBook.proto" -> "src/common/AddressBook.pb.h";
-  "src/common/Person.pb.h" -> "src/common/AddressBook.pb.h";
+  "gen/common/AddressBook.pb.h" [style=filled, fillcolor=orange];
+  "src/common/AddressBook.proto" -> "gen/common/AddressBook.pb.h";
+  "gen/common/Person.pb.h" -> "gen/common/AddressBook.pb.h";
 
-  "src/common/Person.pb.cc" [style=filled, fillcolor=orange];
-  "src/common/Person.proto" -> "src/common/Person.pb.cc";
-  "src/common/Person.pb.h" -> "src/common/Person.pb.cc";
+  "gen/common/Person.pb.cc" [style=filled, fillcolor=orange];
+  "src/common/Person.proto" -> "gen/common/Person.pb.cc";
+  "gen/common/Person.pb.h" -> "gen/common/Person.pb.cc";
 
-  "src/common/Person.pb.h" [style=filled, fillcolor=orange];
-  "src/common/Person.proto" -> "src/common/Person.pb.h";
-  "src/common/PhoneNumber.pb.h" -> "src/common/Person.pb.h";
+  "gen/common/Person.pb.h" [style=filled, fillcolor=orange];
+  "src/common/Person.proto" -> "gen/common/Person.pb.h";
+  "gen/common/PhoneNumber.pb.h" -> "gen/common/Person.pb.h";
 
-  "src/common/PhoneNumber.pb.cc" [style=filled, fillcolor=orange];
-  "src/common/PhoneNumber.proto" -> "src/common/PhoneNumber.pb.cc";
-  "src/common/PhoneNumber.pb.h" -> "src/common/PhoneNumber.pb.cc";
+  "gen/common/PhoneNumber.pb.cc" [style=filled, fillcolor=orange];
+  "src/common/PhoneNumber.proto" -> "gen/common/PhoneNumber.pb.cc";
+  "gen/common/PhoneNumber.pb.h" -> "gen/common/PhoneNumber.pb.cc";
 
-  "src/common/PhoneNumber.pb.h" [style=filled, fillcolor=orange];
-  "src/common/PhoneNumber.proto" -> "src/common/PhoneNumber.pb.h";
+  "gen/common/PhoneNumber.pb.h" [style=filled, fillcolor=orange];
+  "src/common/PhoneNumber.proto" -> "gen/common/PhoneNumber.pb.h";
 
   "bld/libz.exists" [style=filled, fillcolor=gray];
   "<system>" -> "bld/libz.exists";
 
   "src/manager/manager.cc" [shape=box, style=filled, fillcolor=orange];
-  "src/common/AddressBook.pb.h" -> "src/manager/manager.cc";
+  "gen/common/AddressBook.pb.h" -> "src/manager/manager.cc";
   "src/common/dummy.h" -> "src/manager/manager.cc";
 
   "src/search/search.cc" [shape=box, style=filled, fillcolor=orange];
-  "src/common/AddressBook.pb.h" -> "src/search/search.cc";
+  "gen/common/AddressBook.pb.h" -> "src/search/search.cc";
   "src/common/dummy.h" -> "src/search/search.cc";
 
   "src/common/dummy.cc" [shape=box, style=filled, fillcolor=orange];
@@ -101,8 +101,10 @@ digraph Build {
   "src/common/dummy.h" -> "src/common/dummy_TEST.cc";
 
   "src/common/AddressBook.proto" [shape=box, style=filled, fillcolor=blue];
+  "src/common/Person.proto" -> "src/common/AddressBook.proto";
 
   "src/common/Person.proto" [shape=box, style=filled, fillcolor=blue];
+  "src/common/PhoneNumber.proto" -> "src/common/Person.proto";
 
   "src/common/PhoneNumber.proto" [shape=box, style=filled, fillcolor=blue];
 
