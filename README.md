@@ -14,6 +14,11 @@ The Makefile builds the graph file as well. The application utilizes Google's
 Test framework as well as Google's cpplint syntax checker. The Makefile handles
 all of this.
 
+## Environment Setup
+```bash
+sudo apt-get install protobuf-compiler libprotobuf-dev graphviz
+```
+
 ## Build Process
 ```bash
 git clone git@github.com:nicmcd/addressbook.git
