@@ -14,6 +14,13 @@ The Makefile builds the graph file as well. The application utilizes Google's
 Test framework as well as Google's cpplint syntax checker. The Makefile handles
 all of this.
 
+The Makefile is big and ugly. Even worse is that it took me way to long to write and 
+verify. I'm hoping there will be a future build system that will allow me to define
+custom patterns that can be used to define build targets, dependencies, outputs, etc.
+The biggest problem with today's systems is that when you realize you want to add another
+layer to your build (e.g. adding gtest for example), it breaks your Makefile. I also don't
+want to have to learn another syntax.
+
 ## Environment Setup
 ```bash
 sudo apt-get install protobuf-compiler libprotobuf-dev graphviz
